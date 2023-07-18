@@ -10,11 +10,20 @@ ports:
     onOpen: open-browser
 
 tasks:
-  - init: >
-      ( if [ ! -e "Main.hs" ]; then rm -rf /tmp/ihp-boilerplate; git clone https://github.com/digitallyinduced/ihp-boilerplate.git /tmp/ihp-boilerplate; rm -rf /tmp/ihp-boilerplate/.git; cp -r /tmp/ihp-boilerplate/. .; git add . && nix-shell -j auto --cores 0 --quiet --run 'make -s all; new-application Web'; fi) && direnv allow
-    command: >
-      export IHP_BASEURL=`gp url 8000`;
-      export IHP_IDE_BASEURL=`gp url 8001`;
+  - init: |
+      (
+        if [ ! -e "Main.hs" ]; then
+          rm -rf /tmp/ihp-boilerplate
+          git clone https://github.com/digitallyinduced/ihp-boilerplate.git /tmp/ihp-boilerplate
+          rm -rf /tmp/ihp-boilerplate/.git
+          cp -r /tmp/ihp-boilerplate/. .
+          git add . && nix-shell -j auto --cores 0 --quiet --run 'make -s all; new-application Web'
+        fi
+      ) && direnv allow
+
+    command: |
+      export IHP_BASEURL=`gp url 8000`
+      export IHP_IDE_BASEURL=`gp url 8001`
       ./start
 
 vscode:
